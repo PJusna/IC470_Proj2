@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # from flask import Flask, request, render_template, redirect
 # import sqlite3
 
@@ -37,10 +38,12 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Required for session management
 
 # Database connection
+
 def get_db_connection():
     conn = sqlite3.connect('mydatabase.db')
     conn.row_factory = sqlite3.Row
     return conn
+
 
 # Home Page (Only accessible if logged in)
 @app.route('/')
@@ -115,3 +118,4 @@ def post():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
