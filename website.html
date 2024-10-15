@@ -12,7 +12,7 @@
         <h1>Project 2</h1>
 
         <h2>Capstone Submission</h2>
-        <form id="loginForm">
+        <form method="post" action="submit.php">
             <label for="username">Capstone Name</label>
             <input type="text" id="username" name="username" required>
     
@@ -22,12 +22,14 @@
             <label for="qualifications">Qualifications/Requirements</label>
             <input type="text" id="qualifications" name="qualifications" required>
 
+            <label for="goals"> Overall Goal of Capstone </label>
+            <input type="text" id="goal" name="goal" required> 
             
             <!-- <label for="password">Password:</label>
             <input type="password" id="password" name="password" required> -->
     
-            <button type="submit">Post</button>
+            <button type="submit" value="Submit Request"> Post </button>
         </form>
-        <script src="js/scripts.js"></script>
+        <!-- <script src="js/scripts.js"></script> -->
         <a href="login.html" > Link to login.</a>
 </body>
