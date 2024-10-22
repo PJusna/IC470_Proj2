@@ -43,6 +43,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def get_db_conn():
+    conn = sqlite3.connect('userPass.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 # Home Page (Only accessible if logged in)
 @app.route('/')
@@ -51,9 +56,9 @@ def index():
         conn = get_db_connection()
         posts = conn.execute('SELECT * FROM posts').fetchall()
         conn.close()
-        return render_template('index.html', posts=posts)
+        return render_template('website.html', posts=posts)
     else:
-        return redirect('/login')
+        return redirect('/')
 
 # Sign Up Page
 @app.route('/signup', methods=['GET', 'POST'])
@@ -66,12 +71,12 @@ def signup():
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
         # Insert the new user into the database
-        conn = get_db_connection()
+        conn = get_db_conn()
         conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
         conn.commit()
         conn.close()
 
-        return redirect('/login')
+        return redirect('/')
 
     return render_template('signup.html')
 
@@ -79,15 +84,17 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        print("Login attempt")
         username = request.form['username']
         password = request.form['password']
 
         # Check the username and password in the database
-        conn = get_db_connection()
+        conn = get_db_conn()
         user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
         conn.close()
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+        #if user and user['password']:
             session['user_id'] = user['id']
             return redirect('/')
         else:
