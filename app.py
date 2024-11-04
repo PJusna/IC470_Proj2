@@ -51,12 +51,22 @@ def get_db_conn():
 
 # Home Page (Only accessible if logged in)
 @app.route('/')
-def index():
+def website():
     if 'user_id' in session:
         conn = get_db_connection()
         posts = conn.execute('SELECT * FROM posts').fetchall()
         conn.close()
         return render_template('website.html', posts=posts)
+    else:
+        return redirect('/')
+    
+@app.route('/index')
+def index():
+    if 'user_id' in session:
+        conn = get_db_connection()
+        posts = conn.execute('SELECT * FROM posts').fetchall()
+        conn.close()
+        return render_template('index.html', posts=posts)
     else:
         return redirect('/')
 
