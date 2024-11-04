@@ -1,0 +1,37 @@
+body {
+    font-family: 'Times New Roman', Georgia, Garamond;
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start;
+    height: 100vh; 
+    background-color: #f0f0f0;
+}
+
+form {
+    max-width: 300px;
+    margin: auto;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
