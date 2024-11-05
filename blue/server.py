@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import sqlite3
 import urllib.parse
+import os
 
 PORT = 8000  # Port to run the server
 
@@ -13,21 +14,22 @@ def create_table():
         CREATE TABLE IF NOT EXISTS submissions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            message TEXT NOT NULL
+            message TEXT NOT NULL,
+            attributes TEXT NOT NULL
         )
     ''')
     conn.commit()
     conn.close()
 
 # Function to insert data into the SQLite database
-def insert_submission(name, message):
+def insert_submission(name, message, attributes):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO submissions (name, message) VALUES (?, ?)', (name, message))
+        cursor.execute('INSERT INTO submissions (name, message, attributes) VALUES (?, ?, ?)', (name, message, attributes))
         conn.commit()
         conn.close()
-        print(f"Inserted: {name}, {message}")
+        print(f"Inserted: {name}, {message}, {attributes}")
     except sqlite3.DatabaseError as e:
         print(f"Database error: {e}")
 
@@ -45,7 +47,7 @@ def render_database_page():
     submissions = get_all_submissions()
     submissions_html = ""
     for submission in submissions:
-        submissions_html += f"<tr><td>{submission[0]}</td><td>{submission[1]}</td><td>{submission[2]}</td></tr>"
+        submissions_html += f"<tr><td>{submission[0]}</td><td>{submission[1]}</td><td>{submission[2]}</td><td>{submission[3]}</td></tr>"
     with open('database.html', 'r') as file:
         page = file.read()
     page = page.replace("{{ submissions }}", submissions_html)
@@ -65,8 +67,18 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            database_page = render_database_page()  # Get the database page with submissions
-            self.wfile.write(database_page.encode('utf-8'))
+            # get database
+            database_page = render_database_page()
+            self.wfile.write(database_page.encode())
+            #with open('database.html', 'rb') as file:
+                #self.wfile.write(file.read())
+        elif self.path.startswith('/css/'):  # Serve CSS files from the /css folder
+            self.send_response(200)
+            self.send_header('Content-type', 'text/css')
+            self.end_headers()
+            css_file = os.path.join(os.getcwd(), self.path[1:])  # Get the correct file path
+            with open(css_file, 'rb') as file:
+                self.wfile.write(file.read())
         else:
             self.send_response(404)
             self.end_headers()
@@ -79,8 +91,9 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
 
             name = post_data.get('name', [''])[0]
             message = post_data.get('message', [''])[0]
+            attributes = post_data.get('attributes', [''])[0]
 
-            insert_submission(name, message)
+            insert_submission(name, message, attributes)
 
             self.send_response(200)
             self.send_header('Content-type', 'text/html')

@@ -9,7 +9,8 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS submissions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        message TEXT NOT NULL
+        message TEXT NOT NULL,
+        attr TEXT NOT NULL
     )
 ''')
 

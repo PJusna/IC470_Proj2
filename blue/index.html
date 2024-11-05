@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Message</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <h1>Submit Your Message</h1>
     <form action="/submit" method="post">
-        <label for="name">Name:</label>
+        <label for="name">Whats your Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
         <label for="message">Message:</label>
         <textarea id="message" name="message" required></textarea><br><br>
+
+        <label for="attributes">Tell us about you?:</label>
+        <textarea id="attributes" name="attributes" required></textarea><br><br>
 
         <input type="submit" value="Submit">
     </form>
